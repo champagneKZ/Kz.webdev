@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenFields Farm - Admin Panel</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .header h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+        .header p { opacity: 0.9; }
+        
+        .container { max-width: 1400px; margin: 0 auto; }
+        
+        .instructions {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .instructions h3 { color: #92400e; margin-bottom: 0.5rem; }
+        .instructions ol { margin-left: 1.5rem; color: #78350f; line-height: 1.8; }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card h3 {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+        
+        .stat-card .value { font-size: 2rem; font-weight: bold; color: #667eea; }
+        
+        .filters {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .filters label { font-weight: 600; }
+        .filters select, .filters input {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        
+        .btn-generate {
+            padding: 0.75rem 1.5rem;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-left: auto;
+            font-size: 1.1rem;
+        }
+        
+        .btn-generate:hover { background: #059669; }
+        
+        table { width: 100%; border-collapse: collapse; background: white; }
+        thead { background: #667eea; color: white; }
+        thead th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+        
+        tbody tr { border-bottom: 1px solid #f0f0f0; }
+        tbody tr:hover { background: #f9fafb; }
+        tbody td { padding: 1rem; }
+        
+        .product-name { font-weight: 600; color: #1a1a1a; }
+        
+        .category-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .badge-beef { background: #fecaca; color: #991b1b; }
+        .badge-goat { background: #fed7aa; color: #92400e; }
+        .badge-chicken { background: #fef08a; color: #854d0e; }
+        .badge-ram { background: #ddd6fe; color: #5b21b6; }
+        .badge-eggs { background: #bfdbfe; color: #1e40af; }
+        .badge-produce { background: #bbf7d0; color: #166534; }
+        .badge-grains { background: #fce7f3; color: #9f1239; }
+        
+        .stock-input {
+            width: 100px;
+            padding: 0.5rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .stock-input:focus { outline: none; border-color: #667eea; }
+        .stock-input.low { border-color: #f59e0b; background: #fef3c7; }
+        .stock-input.out { border-color: #ef4444; background: #fee2e2; }
+        
+        .stock-status {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .status-in { background: #d1fae5; color: #065f46; }
+        .status-low { background: #fef3c7; color: #92400e; }
+        .status-out { background: #fee2e2; color: #991b1b; }
+        
+        .code-output {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: none;
+        }
+        
+        .code-output.active { display: block; }
+        
+        .code-output h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .code-box {
+            background: #1e293b;
+            color: #10b981;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            position: relative;
+        }
+        
+        .btn-copy {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .btn-copy:hover { background: #059669; }
+        
+        .success-message {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+            font-weight: 600;
+            display: none;
+        }
+        
+        .success-message.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌾 GreenFields Farm - Stock Manager</h1>
+            <p>Easy Inventory Management</p>
+        </div>
+
+        <div class="instructions">
+            <h3>📋 How to Update Your Website Stock</h3>
+            <ol>
+                <li><strong>Update stock numbers</strong> in the table below</li>
+                <li>Click the green <strong>"Generate Update Code"</strong> button</li>
+                <li><strong>Copy</strong> the generated code</li>
+                <li>Open your <strong>farm-shop.html</strong> file</li>
+                <li>Find the line that says <code>const products = [</code></li>
+                <li><strong>Replace</strong> everything from <code>const products = [</code> to the matching <code>];</code></li>
+                <li><strong>Save</strong> the file and upload to your website</li>
+            </ol>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <h3>Total Products</h3>
+                <div class="value" id="totalProducts">40</div>
+            </div>
+            <div class="stat-card">
+                <h3>In Stock</h3>
+                <div class="value" id="inStock">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Low Stock (≤5)</h3>
+                <div class="value" style="color: #f59e0b;" id="lowStock">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Out of Stock</h3>
+                <div class="value" style="color: #ef4444;" id="outStock">0</div>
+            </div>
+        </div>
+
+        <div class="filters">
+            <label>Category:</label>
+            <select id="categoryFilter" onchange="filterProducts()">
+                <option value="all">All Categories</option>
+                <option value="beef">Beef</option>
+                <option value="goat">Goat Meat</option>
+                <option value="chicken">Chicken</option>
+                <option value="ram">Ram/Sheep</option>
+                <option value="eggs">Eggs & Live Birds</option>
+                <option value="produce">Farm Produce</option>
+                <option value="grains">Grains & Tubers</option>
+            </select>
+
+            <label>Search:</label>
+            <input type="text" id="searchInput" placeholder="Search products..." oninput="filterProducts()">
+
+            <button class="btn-generate" onclick="generateCode()">📋 Generate Update Code</button>
+        </div>
+
+        <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Product Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="inventoryTable">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="code-output" id="codeOutput">
+            <h3>✅ Copy This Code and Paste Into farm-shop.html</h3>
+            <div style="position: relative;">
+                <div class="code-box" id="codeBox"></div>
+                <button class="btn-copy" onclick="copyCode()">📋 Copy Code</button>
+            </div>
+            <div class="success-message" id="successMessage">✅ Code copied! Now paste it into your farm-shop.html file</div>
+        </div>
+    </div>
+
+    <script>
+        let products = [
+            { id: 1, name: "Beef Assorted Meat", category: "beef", price: 3500, weight: "1 kg", description: "Mixed beef parts - shaki, roundabout, liver. Perfect for pepper soup", image: "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=600&q=80", stock: 25 },
+            { id: 2, name: "Fresh Beef (Boneless)", category: "beef", price: 4800, weight: "1 kg", description: "Premium boneless beef cuts for stew, suya, or grilling", image: "https://images.unsplash.com/photo-1603048588665-791ca8aea617?w=600&q=80", stock: 30 },
+            { id: 3, name: "Beef with Bone", category: "beef", price: 4200, weight: "1 kg", description: "Tender beef cuts with bone for rich stock", image: "https://images.unsplash.com/photo-1588347818036-8fc5ec7e95cd?w=600&q=80", stock: 20 },
+            { id: 4, name: "Ponmo (Cow Skin)", category: "beef", price: 2000, weight: "1 kg", description: "Soft, well-processed kpomo for stew and soups", image: "https://images.unsplash.com/photo-1625937286074-9ca519d5d9df?w=600&q=80", stock: 40 },
+            { id: 5, name: "Fresh Offals", category: "beef", price: 2800, weight: "1 kg", description: "Kidney, liver, heart - cleaned and fresh", image: "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=600&q=80", stock: 15 },
+            { id: 6, name: "Oxtail", category: "beef", price: 5500, weight: "1 kg", description: "Perfect for special soups and stews", image: "https://images.unsplash.com/photo-1602470520998-f4a52199a3d6?w=600&q=80", stock: 10 },
+            { id: 7, name: "Suya Meat (Cut)", category: "beef", price: 5200, weight: "1 kg", description: "Pre-cut beef strips ready for suya spicing", image: "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=600&q=80", stock: 18 },
+            { id: 8, name: "Goat Meat (Fresh Cut)", category: "goat", price: 4500, weight: "1 kg", description: "Fresh chevon perfect for pepper soup, nkwobi, asun", image: "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=600&q=80", stock: 22 },
+            { id: 9, name: "Goat Head", category: "goat", price: 6000, weight: "1 head", description: "Complete goat head for nkwobi and isi-ewu", image: "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=600&q=80", stock: 8 },
+            { id: 10, name: "Whole Live Goat", category: "goat", price: 45000, weight: "Medium size", description: "Healthy West African Dwarf goat, live delivery", image: "https://images.unsplash.com/photo-1583518257225-f9a8081f6a84?w=600&q=80", stock: 5 },
+            { id: 11, name: "Goat Assorted", category: "goat", price: 3800, weight: "1 kg", description: "Mixed parts including intestines for pepper soup", image: "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=600&q=80", stock: 12 },
+            { id: 12, name: "Goat Leg (Nkwobi Cut)", category: "goat", price: 5200, weight: "2 legs", description: "Premium legs perfect for nkwobi preparation", image: "https://images.unsplash.com/photo-1602470520998-f4a52199a3d6?w=600&q=80", stock: 14 },
+            { id: 13, name: "Live Broiler Chicken", category: "chicken", price: 4500, weight: "2.5-3 kg bird", description: "Healthy broiler, live delivery or dressed", image: "https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=600&q=80", stock: 35 },
+            { id: 14, name: "Dressed Chicken", category: "chicken", price: 4200, weight: "Per kg", description: "Cleaned, gutted broiler ready for cooking", image: "https://images.unsplash.com/photo-1587593810167-a84920ea0781?w=600&q=80", stock: 28 },
+            { id: 15, name: "Chicken Parts (Assorted)", category: "chicken", price: 3800, weight: "1 kg", description: "Wings, laps, gizzards mixed", image: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=600&q=80", stock: 20 },
+            { id: 16, name: "Local Chicken (Live)", category: "chicken", price: 6500, weight: "Per bird", description: "Free-range local fowl for pepper soup", image: "https://images.unsplash.com/photo-1599152889448-eb8f93620239?w=600&q=80", stock: 12 },
+            { id: 17, name: "Turkey (Whole)", category: "chicken", price: 18000, weight: "5-7 kg", description: "Premium turkey for Christmas and celebrations", image: "https://images.unsplash.com/photo-1612170153139-6f881ff067e0?w=600&q=80", stock: 6 },
+            { id: 18, name: "Duck (Whole)", category: "chicken", price: 8500, weight: "Per bird", description: "Fresh duck for grilling and special meals", image: "https://images.unsplash.com/photo-1590424013321-5f8a576d6c0b?w=600&q=80", stock: 8 },
+            { id: 19, name: "Live Ram (Small)", category: "ram", price: 65000, weight: "25-35 kg", description: "Yankasa breed, perfect for family celebrations", image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80", stock: 4 },
+            { id: 20, name: "Live Ram (Medium)", category: "ram", price: 95000, weight: "40-50 kg", description: "Healthy Balami or Uda breed", image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80", stock: 3 },
+            { id: 21, name: "Live Ram (Large)", category: "ram", price: 150000, weight: "55+ kg", description: "Premium Uda ram for Ileya and big events", image: "https://images.unsplash.com/photo-1583771132871-bc7c3db6bc2c?w=600&q=80", stock: 2 },
+            { id: 22, name: "Ram Meat (Fresh)", category: "ram", price: 4800, weight: "1 kg", description: "Processed mutton, boneless cuts", image: "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=600&q=80", stock: 15 },
+            { id: 23, name: "Ram Head", category: "ram", price: 7500, weight: "1 head", description: "Complete ram head for special delicacy", image: "https://images.unsplash.com/photo-1602470520998-f4a52199a3d6?w=600&q=80", stock: 6 },
+            { id: 24, name: "Fresh Eggs (Crate)", category: "eggs", price: 3200, weight: "30 eggs", description: "Farm-fresh eggs from healthy layers", image: "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=600&q=80", stock: 50 },
+            { id: 25, name: "Fresh Eggs (½ Crate)", category: "eggs", price: 1700, weight: "15 eggs", description: "Half crate of fresh eggs", image: "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=600&q=80", stock: 60 },
+            { id: 26, name: "Point-of-Lay Pullets", category: "eggs", price: 3500, weight: "Per bird", description: "Ready to start laying, 18-20 weeks old", image: "https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=600&q=80", stock: 20 },
+            { id: 27, name: "Day-Old Chicks", category: "eggs", price: 450, weight: "Per chick", description: "Healthy broiler day-old chicks (minimum 50)", image: "https://images.unsplash.com/photo-1563281577-a7be47e20db9?w=600&q=80", stock: 200 },
+            { id: 28, name: "Fresh Tomatoes", category: "produce", price: 2000, weight: "1 basket (small)", description: "Farm-fresh tomatoes, vine-ripened", image: "https://images.unsplash.com/photo-1546470427-e26264be0b0d?w=600&q=80", stock: 45 },
+            { id: 29, name: "Fresh Pepper (Atarodo)", category: "produce", price: 3500, weight: "1 kg", description: "Hot scotch bonnet peppers", image: "https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?w=600&q=80", stock: 30 },
+            { id: 30, name: "Bell Peppers (Tatashe)", category: "produce", price: 2500, weight: "1 kg", description: "Red bell peppers for stew", image: "https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?w=600&q=80", stock: 35 },
+            { id: 31, name: "Ugwu (Pumpkin Leaves)", category: "produce", price: 500, weight: "1 bunch", description: "Fresh vegetable leaves", image: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=600&q=80", stock: 55 },
+            { id: 32, name: "Waterleaf", category: "produce", price: 500, weight: "1 bunch", description: "Fresh waterleaf for soup", image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&q=80", stock: 50 },
+            { id: 33, name: "Garden Eggs", category: "produce", price: 1500, weight: "1 kg", description: "Fresh African eggplant", image: "https://images.unsplash.com/photo-1659261200833-ec8761558af7?w=600&q=80", stock: 25 },
+            { id: 34, name: "Okro", category: "produce", price: 800, weight: "1 kg", description: "Fresh okra for soup and stew", image: "https://images.unsplash.com/photo-1626638112918-bc045ac46b95?w=600&q=80", stock: 40 },
+            { id: 35, name: "White Yam", category: "grains", price: 4500, weight: "1 tuber (large)", description: "Premium white yam from our farm", image: "https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=600&q=80", stock: 30 },
+            { id: 36, name: "Sweet Potatoes", category: "grains", price: 2000, weight: "5 tubers", description: "Fresh sweet potatoes", image: "https://images.unsplash.com/photo-1596097635121-c1b78fc45a5f?w=600&q=80", stock: 35 },
+            { id: 37, name: "Cassava (Fresh)", category: "grains", price: 1500, weight: "5 tubers", description: "Fresh cassava for garri, fufu", image: "https://images.unsplash.com/photo-1591119434658-5f88ecf8e9e1?w=600&q=80", stock: 40 },
+            { id: 38, name: "Maize (Corn)", category: "grains", price: 1200, weight: "1 kg", description: "Dried yellow maize", image: "https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=600&q=80", stock: 60 },
+            { id: 39, name: "Plantains", category: "grains", price: 2500, weight: "1 bunch (10-12)", description: "Ripe or unripe plantains", image: "https://images.unsplash.com/photo-1587334206515-58c00783dd9f?w=600&q=80", stock: 28 },
+            { id: 40, name: "Cocoyam", category: "grains", price: 2200, weight: "1 kg", description: "Fresh cocoyam for soup", image: "https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=600&q=80", stock: 22 }
+        ];
+
+        function renderTable() {
+            const table = document.getElementById('inventoryTable');
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            let filtered = products;
+            if (categoryFilter !== 'all') {
+                filtered = filtered.filter(p => p.category === categoryFilter);
+            }
+            if (searchTerm) {
+                filtered = filtered.filter(p => p.name.toLowerCase().includes(searchTerm));
+            }
+            
+            table.innerHTML = filtered.map(product => {
+                const stockClass = product.stock === 0 ? 'out' : product.stock <= 5 ? 'low' : '';
+                const statusClass = product.stock === 0 ? 'status-out' : product.stock <= 5 ? 'status-low' : 'status-in';
+                const statusText = product.stock === 0 ? 'Out of Stock' : product.stock <= 5 ? 'Low Stock' : 'In Stock';
+                
+                return `
+                    <tr>
+                        <td>${product.id}</td>
+                        <td class="product-name">${product.name}</td>
+                        <td><span class="category-badge badge-${product.category}">${product.category}</span></td>
+                        <td>₦${product.price.toLocaleString()}</td>
+                        <td><input type="number" class="stock-input ${stockClass}" value="${product.stock}" 
+                            onchange="updateStock(${product.id}, this.value)" min="0"></td>
+                        <td><span class="stock-status ${statusClass}">${statusText}</span></td>
+                    </tr>
+                `;
+            }).join('');
+            
+            updateStats();
+        }
+        
+        function updateStock(id, newStock) {
+            const product = products.find(p => p.id === id);
+            if (product) {
+                product.stock = parseInt(newStock) || 0;
+                renderTable();
+            }
+        }
+        
+        function updateStats() {
+            const inStock = products.filter(p => p.stock > 5).length;
+            const lowStock = products.filter(p => p.stock > 0 && p.stock <= 5).length;
+            const outStock = products.filter(p => p.stock === 0).length;
+            
+            document.getElementById('totalProducts').textContent = products.length;
+            document.getElementById('inStock').textContent = inStock;
+            document.getElementById('lowStock').textContent = lowStock;
+            document.getElementById('outStock').textContent = outStock;
+        }
+        
+        function filterProducts() {
+            renderTable();
+        }
+        
+        function generateCode() {
+            const code = `const products = ${JSON.stringify(products, null, 4)};`;
+            document.getElementById('codeBox').textContent = code;
+            document.getElementById('codeOutput').classList.add('active');
+            document.getElementById('codeOutput').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function copyCode() {
+            const codeBox = document.getElementById('codeBox');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBox.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            const successMsg = document.getElementById('successMessage');
+            successMsg.classList.add('active');
+            setTimeout(() => successMsg.classList.remove('active'), 3000);
+        }
+        
+        // Initialize
+        renderTable();
+    </script>
+</body>
+</html>
