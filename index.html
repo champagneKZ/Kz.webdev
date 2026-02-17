@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Developer Portfolio - E-Commerce Specialist</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #1a202c;
+            line-height: 1.6;
+            background: #f7fafc;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #667eea;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255,255,255,0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #1a202c;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #4a5568;
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #4a5568;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .projects {
+            display: grid;
+            gap: 3rem;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+        }
+
+        .project-content {
+            padding: 2.5rem;
+        }
+
+        .project-tags {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            background: #e6fffa;
+            color: #234e52;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .tag.premium {
+            background: #fef3c7;
+            color: #78350f;
+        }
+
+        .project-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #1a202c;
+        }
+
+        .project-description {
+            color: #4a5568;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .feature-icon {
+            color: #10b981;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .feature-text {
+            color: #2d3748;
+            font-weight: 500;
+        }
+
+        .project-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .btn-view {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-view:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-download {
+            padding: 0.75rem 1.5rem;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            border: 2px solid #667eea;
+            transition: all 0.3s;
+        }
+
+        .btn-download:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .services {
+            background: white;
+            padding: 4rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            padding: 2rem;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s;
+        }
+
+        .service-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.1);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #1a202c;
+        }
+
+        .service-description {
+            color: #4a5568;
+            line-height: 1.7;
+        }
+
+        .service-price {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid #e2e8f0;
+            color: #667eea;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .contact {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .contact h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .contact-methods {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .contact-btn {
+            padding: 1rem 2rem;
+            background: white;
+            color: #1a202c;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .contact-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255,255,255,0.3);
+        }
+
+        .footer {
+            background: #0f172a;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .project-image {
+                height: 250px;
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>Professional Web Development</h1>
+        <p>I build modern, mobile-responsive e-commerce websites for Nigerian businesses. Fast delivery.</p>
+        <div class="hero-cta">
+            <a href="#projects" class="btn btn-primary">View My Work</a>
+            <a href="#contact" class="btn btn-secondary">Get A Quote</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Client Satisfaction</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">21 Days</div>
+                <div class="stat-label">Average Delivery</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">₦200k+</div>
+                <div class="stat-label">Starting Price</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Support Available</div>
+            </div>
+        </div>
+
+        <div id="projects">
+            <h2 class="section-title">Featured Project</h2>
+            <p class="section-subtitle">A complete e-commerce solution built for a modern Nigerian integrated farm business</p>
+
+            <div class="projects">
+                <div class="project-card">
+                    <div class="project-image">
+                        🌾
+                    </div>
+                    <div class="project-content">
+                        <div class="project-tags">
+                            <span class="tag">E-Commerce</span>
+                            <span class="tag">Mobile-First</span>
+                            <span class="tag">WhatsApp Integration</span>
+                            <span class="tag premium">Premium Build</span>
+                        </div>
+
+                        <h3 class="project-title">GreenFields Integrated Farm</h3>
+                        <p class="project-description">
+                            Complete e-commerce platform for an agricultural business in Abuja. Features a full shopping cart system, inventory management, WhatsApp order integration, and mobile-responsive design optimized for Nigerian users.
+                        </p>
+
+                        <div class="project-features">
+                            <div class="feature-item">
+                                <span class="feature-icon">✓</span>
+                                <span class="feature-text">40+ Products with Images</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">✓</span>
+                                <span class="feature-text">Shopping Cart System</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">✓</span>
+                                <span class="feature-text">Payment Integration (Bank, Card, COD)</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">✓</span>
+                                <span class="feature-text">Admin Panel for Stock Management</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">✓</span>
+                                <span class="feature-text">WhatsApp Order Automation</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">✓</span>
+                                <span class="feature-text">Payment Proof Upload</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">✓</span>
+                                <span class="feature-text">Automatic Bulk Discounts</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">✓</span>
+                                <span class="feature-text">Product Reviews & Ratings</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">✓</span>
+                                <span class="feature-text">Blog/News Section</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">✓</span>
+                                <span class="feature-text">FAQ & Customer Support</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">✓</span>
+                                <span class="feature-text">Newsletter Signup</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">✓</span>
+                                <span class="feature-text">100% Mobile Responsive</span>
+                            </div>
+                        </div>
+
+                        <div class="project-actions">
+                            <a href="farm-shop.html" target="_blank" class="btn-view">🔗 View Live Demo</a>
+                            <a href="admin-panel.html" target="_blank" class="btn-download">⚙️ View Admin Panel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="services">
+        <div class="container">
+            <h2 class="section-title">Services & Pricing</h2>
+            <p class="section-subtitle">Transparent pricing for Nigerian businesses. All packages include mobile optimization and WhatsApp integration.</p>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">📦</div>
+                    <h3 class="service-title">Starter Package</h3>
+                    <p class="service-description">
+                        Perfect for small businesses getting started online. Includes shopping cart, 30 products, mobile design, and 1 week support.
+                    </p>
+                    <div class="service-price"><span style="font-size: 0.9rem; font-weight: 700; display: block; margin-bottom: 0.5rem; color: #718096;">starting from</span>₦200,000</div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🚀</div>
+                    <h3 class="service-title">Professional Package</h3>
+                    <p class="service-description">
+                        Full-featured e-commerce site with admin panel, unlimited products, payment integration, blog, SEO, and 2 weeks support.
+                    </p>
+                    <div class="service-price"><span style="font-size: 0.9rem; font-weight: 700; display: block; margin-bottom: 0.5rem; color: #718096;">starting from</span>₦350,000</div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">⭐</div>
+                    <h3 class="service-title">Premium Package</h3>
+                    <p class="service-description">
+                        Complete digital solution including custom design, social media integration, email marketing, analytics, and 1 month support.
+                    </p>
+                    <div class="service-price"><span style="font-size: 0.9rem; font-weight: 700; display: block; margin-bottom: 0.5rem; color: #718096;">starting from</span>₦600,000</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="contact" id="contact">
+        <h2>Ready To Start Your Project?</h2>
+        <p>Get a professional website for your business in 14-21 days</p>
+        
+        <div class="contact-methods">
+            <a href="https://wa.me/2347011694732?text=Hi!%20I'm%20interested%20in%20getting%20a%20website%20built" class="contact-btn" target="_blank">
+                💬 WhatsApp Me
+            </a>
+            <a href="mailto:your.email@example.com" class="contact-btn">
+                📧 Send Email
+            </a>
+            <a href="tel:+2347011694732" class="contact-btn">
+                📞 Call Now
+            </a>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2026 Professional Web Development. All rights reserved.</p>
+        <p style="margin-top: 1rem; opacity: 0.7;">Building modern websites for Nigerian businesses</p>
+    </div>
+</body>
+</html>
